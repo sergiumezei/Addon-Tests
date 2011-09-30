@@ -69,9 +69,9 @@ class TestHomePage:
         https://litmus.mozilla.org/show_test.cgi?id=22924
         """
         amo_home_page = AddonsHomePage(mozwebqa)
-        Assert.true(amo_home_page.is_amo_logo_visible)
+   #     Assert.true(amo_home_page.is_amo_logo_visible)
         Assert.equal(amo_home_page.amo_logo_title, "Return to the Firefox Add-ons homepage")
-
+uyu
     def test_that_checks_the_image_for_amo_logo(self, mozwebqa):
         """
         Litmus 25742
