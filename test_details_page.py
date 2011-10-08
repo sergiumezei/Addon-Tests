@@ -24,6 +24,7 @@
 #                 Bebe <florin.strugariu@softvision.ro>
 #                 Alex Rodionov <p0deje@gmail.com>
 #                 Alin Trif <alin.trif@softvision.ro>
+#                 Sergiu Mezei <sergiu.mezei@gmail.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -145,7 +146,7 @@ class TestDetailsPage:
         details_page.click_website_link()
         Assert.true(website_link in details_page.get_url_current_page())
 
-    @xfail(reason="bugzilla 688910")
+    @xfail(reason = "bugzilla 688910")
     def test_that_whats_this_link_for_source_license_links_to_an_answer_in_faq(self, mozwebqa):
         """ Test for Litmus 11530"""
         amo_details_page = AddonsDetailsPage(mozwebqa, "Firebug")
@@ -253,7 +254,7 @@ class TestDetailsPage:
         image_viewer.close()
         Assert.false(image_viewer.is_visible)
 
-    @xfail(reason="Flaky test")
+    @xfail(reason = "Flaky test")
     def test_that_review_usernames_are_clickable(self, mozwebqa):
         """
         Litmus 4842
@@ -334,3 +335,12 @@ class TestDetailsPage:
         amo_details_page = AddonsDetailsPage(mozwebqa, 'Firebug')
         addon_review_box = amo_details_page.click_to_write_review()
         Assert.true(addon_review_box.is_review_box_visible)
+
+    def test_that_part_of_collections_header_is_present(self, mozwebqa):
+        """ Test for Litmus 25722"""
+        amo_details_page = AddonsDetailsPage(mozwebqa, "Firebug")
+        Assert.true(amo_details_page.is_part_of_collections_header_visible)
+        Assert.equal(amo_details_page.part_of_collections_header, "Part of these Collections")
+        Assert.true(amo_details_page.part_of_collections_section_has_3_collections)
+        collection_page = amo_details_page.click_on_any_collection()
+        Assert.contains(collection_page.page_title, collection_page.selenium_page_title)

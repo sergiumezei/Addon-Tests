@@ -29,6 +29,7 @@
 #                 Teodosia Pop <teodosia.pop@softvision.ro>
 #                 Alex Lakatos <alex@greensqr.com>
 #                 Alin Trif <alin.trif@softvision.ro>
+#                 Sergiu Mezei <sergiu.mezei@gmail.com>
 #
 # Alternatively, the contents of this file may be used under the terms of
 # either the GNU General Public License Version 2 or later (the "GPL"), or
@@ -100,8 +101,9 @@ class AddonsDetailsPage(AddonsBasePage):
     _other_addons_by_author_locator = 'css=#author-addons'
     _reviews_locator = "id=reviews"
     _add_review_link_locator = "id=add-review"
+    _about_this_collection_locator = "css=.primary .featured"
 
-    def __init__(self, testsetup, addon_name=None):
+    def __init__(self, testsetup, addon_name = None):
         #formats name for url
         AddonsBasePage.__init__(self, testsetup)
         if (addon_name != None):
@@ -343,7 +345,7 @@ class AddonsDetailsPage(AddonsBasePage):
         def prev_set(self):
             self.selenium.click(self._prev_locator)
 
-        def click_image(self, image_no=0):
+        def click_image(self, image_no = 0):
             self.selenium.click('%s li:nth(%s) a' % (self._image_locator, image_no))
             from image_viewer_region import ImageViewer
             image_viewer = ImageViewer(self.testsetup)
@@ -464,3 +466,26 @@ class AddonsDetailsPage(AddonsBasePage):
     def _wait_for_reviews_and_other_addons_by_author_to_load(self):
         self.wait_for_element_present(self._reviews_locator)
         self.wait_for_element_present(self._other_addons_by_author_locator)
+
+    @property
+    def part_of_collections_section_has_3_collections(self):
+        x = self.selenium.get_css_count("%s > ul.listing-grid > section > li" % self._part_of_collections_locator)
+        return x == 3
+
+    def click_on_any_collection(self):
+        self.selenium.click("%s > ul.listing-grid > section > li:nth(0) > div.hovercard > a" % self._part_of_collections_locator)
+        self.selenium.wait_for_page_to_load(self.timeout)
+        return CollectionPage(self.testsetup)
+
+
+class CollectionPage(AddonsBasePage):
+
+    _page_title = 'Collections :: Add-ons for Firefox'
+
+    @property
+    def page_title(self):
+        return self._page_title
+
+    @property
+    def selenium_page_title(self):
+        return self.selenium.get_title()
